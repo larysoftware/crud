@@ -13,5 +13,9 @@ readonly class PostCode
         if (empty($this->value)) {
             throw new InvalidArgumentException("Postcode can't be empty");
         }
+
+        if (strlen($this->value) > 10) {
+            throw new InvalidArgumentException("Postcode length cannot exceed 10 characters");
+        }
     }
 }

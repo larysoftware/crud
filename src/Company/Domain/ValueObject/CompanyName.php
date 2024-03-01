@@ -13,5 +13,9 @@ readonly class CompanyName
         if (empty($this->value)) {
             throw new InvalidArgumentException("Company name can't be empty");
         }
+
+        if (strlen($this->value) > 255) {
+            throw new InvalidArgumentException("Company name length cannot exceed 255 characters");
+        }
     }
 }

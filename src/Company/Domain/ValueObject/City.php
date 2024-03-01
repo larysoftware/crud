@@ -8,10 +8,14 @@ use InvalidArgumentException;
 
 readonly class City
 {
-    public function __construct(public string $city)
+    public function __construct(public string $value)
     {
-        if (empty($this->city)) {
+        if (empty($this->value)) {
             throw new InvalidArgumentException("City can't be empty");
+        }
+
+        if (strlen($this->value) > 255) {
+            throw new InvalidArgumentException("City cannot exceed 255 characters");
         }
     }
 }

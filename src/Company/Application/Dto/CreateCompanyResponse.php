@@ -18,7 +18,7 @@ readonly class CreateCompanyResponse implements JsonSerializable
     public function jsonSerialize(): array
     {
         return [
-          'id' => $this->companyId
+          'company_id' => $this->companyId
         ];
     }
 }

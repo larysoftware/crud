@@ -13,5 +13,9 @@ readonly class Address
         if (empty($this->value)) {
             throw new InvalidArgumentException("Address can't be empty");
         }
+
+        if (strlen($this->value) > 255) {
+            throw new InvalidArgumentException("Address length cannot exceed 255 characters");
+        }
     }
 }

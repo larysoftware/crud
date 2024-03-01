@@ -1,0 +1,22 @@
+company.create:
+  path: /
+  controller: App\Company\Web\CompanyController::create
+  methods: POST
+company.update:
+  path: /{companyId}
+  controller: App\Company\Web\CompanyController::update
+  methods: PUT
+  requirements:
+    companyId: '\d+'
+company.delete:
+  path: /{companyId}
+  controller: App\Company\Web\CompanyController::delete
+  methods: DELETE
+  requirements:
+    companyId: '\d+'
+company.get:
+  path: /{companyId}
+  controller: App\Company\Web\CompanyController::get
+  methods: GET
+  requirements:
+    companyId: '\d+'

@@ -6,6 +6,8 @@ namespace App\Company\Domain\ValueObject;
 
 use InvalidArgumentException;
 
+use function strlen;
+
 readonly class Address
 {
     public function __construct(public string $value)

@@ -22,7 +22,7 @@ readonly class CompanyRepository implements CompanyRepositoryInterface
      * @throws Exception
      * @throws NipAlreadyExistsException
      */
-    public function insert(Company $company): Company
+    public function insert(Company $company): CompanyId
     {
         try {
             $this->connection->executeStatement(
@@ -35,8 +35,7 @@ readonly class CompanyRepository implements CompanyRepositoryInterface
                     'postcode' => $company->postCode->value,
                 ]
             );
-            $company->companyId = new CompanyId((int)$this->connection->lastInsertId());
-            return $company;
+            return new CompanyId((int)$this->connection->lastInsertId());
         } catch (UniqueConstraintViolationException) {
             throw new NipAlreadyExistsException(
                 sprintf(
@@ -49,7 +48,6 @@ readonly class CompanyRepository implements CompanyRepositoryInterface
 
     public function update(Company $company): void
     {
-        // TODO: Implement update() method.
     }
 
     public function delete(CompanyId $companyId): void

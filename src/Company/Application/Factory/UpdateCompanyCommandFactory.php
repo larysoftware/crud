@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Company\Application\Factory;
 
-use App\Company\Application\Dto\CreateCompanyRequest;
+use App\Company\Application\Command\UpdateCompanyCommand;
 use InvalidArgumentException;
 
 use function sprintf;
 use function is_string;
 
-class CreateCompanyRequestFactory
+class UpdateCompanyCommandFactory
 {
     private const NAME = 'name';
     private const NIP = 'nip';
@@ -18,7 +18,7 @@ class CreateCompanyRequestFactory
     private const CITY = 'city';
     private const POSTCODE = 'postcode';
 
-    private const ALL_FIELDS = [
+    private const REQUIRED_STRING_DATA = [
         self::NAME,
         self::NIP,
         self::ADDRESS,
@@ -26,21 +26,23 @@ class CreateCompanyRequestFactory
         self::POSTCODE
     ];
 
-    public function create(array $data): CreateCompanyRequest
+
+    public function create(int $id, array $data): UpdateCompanyCommand
     {
-        $this->validData($data);
-        return new CreateCompanyRequest(
-          $data[self::NAME],
-          $data[self::NIP],
-          $data[self::ADDRESS],
-          $data[self::CITY],
-          $data[self::POSTCODE]
+        $this->validBodyData($data);
+        return new UpdateCompanyCommand(
+            $id,
+            $data[self::NAME],
+            $data[self::NIP],
+            $data[self::ADDRESS],
+            $data[self::CITY],
+            $data[self::POSTCODE]
         );
     }
 
-    private function validData(array $data): void
+    private function validBodyData(array $data): void
     {
-        foreach (self::ALL_FIELDS as $field) {
+        foreach (self::REQUIRED_STRING_DATA as $field) {
             if (!isset($data[$field]) || !is_string($data[$field])) {
                 throw new InvalidArgumentException(
                     sprintf(

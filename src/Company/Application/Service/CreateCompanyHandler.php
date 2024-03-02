@@ -31,7 +31,7 @@ readonly class CreateCompanyHandler
                     new Nip($request->nip),
                     new PostCode($request->postCode)
                 )
-            )->companyId->value
+            )->value
         );
     }
 }

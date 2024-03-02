@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Company\Infrastructure\Repository;
 
+use App\Company\Domain\Collection\EmployeeViewCollection;
 use App\Company\Domain\Entity\Employee;
 use App\Company\Domain\Entity\EmployeeView;
 use App\Company\Domain\Exception\CompanyNotExistException;
@@ -38,6 +39,30 @@ readonly class EmployeeRepository implements EmployeeRepositoryInterface
     public function save(Employee $employee): EmployeeId
     {
         return $employee->employeeId ? $this->update($employee) : $this->create($employee);
+    }
+
+
+    public function findAllByCompanyId(CompanyId $companyId): EmployeeViewCollection
+    {
+        $collection = new EmployeeViewCollection();
+        $query = $this->connection->executeQuery(
+            'SELECT `first_name`, `last_name`, `email`, `phone_number` FROM employees WHERE company_id = :company_id',
+            [
+                'company_id' => $companyId->value
+            ]
+        );
+        $results = $query->fetchAllAssociative();
+        foreach ($results as $result) {
+            $collection->add(
+                new EmployeeView(
+                    new FirstName($result['first_name']),
+                    new LastName($result['last_name']),
+                    new Email($result['email']),
+                    $result['phone_number'] ? new PhoneNumber($result['phone_number']) : null
+                )
+            );
+        }
+        return $collection;
     }
 
     /**

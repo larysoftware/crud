@@ -8,6 +8,7 @@ use App\Company\Application\Command\DeleteEmployeeCommand;
 use App\Company\Application\Command\UpdateEmployeeCommand;
 use App\Company\Application\Dto\CreateEmployeeRequest;
 use App\Company\Application\Dto\EmployeeCompanyRequestQuery;
+use App\Company\Application\Query\GetAllEmployeeQuery;
 use App\Company\Application\Query\GetEmployeeQuery;
 use App\Company\Application\Service\CreateEmployeeHandler;
 use App\Company\Domain\ValueObject\CompanyId;
@@ -20,6 +21,16 @@ use Exception;
 
 class EmployeeController extends ApiAbstractController
 {
+    public function collect(GetAllEmployeeQuery $query, int $companyId): JsonResponse
+    {
+        try {
+            $companyIdValue = new CompanyId($companyId);
+            return new JsonResponse($query->query($companyIdValue)->getAll());
+        } catch (Exception $exception) {
+            return $this->handleException($exception, $companyIdValue ?? null);
+        }
+    }
+
     public function create(CreateEmployeeHandler $handler, CreateEmployeeRequest $request): JsonResponse
     {
         try {

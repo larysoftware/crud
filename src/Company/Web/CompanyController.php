@@ -7,6 +7,7 @@ namespace App\Company\Web;
 use App\Company\Application\Command\DeleteCompanyCommand;
 use App\Company\Application\Command\UpdateCompanyCommand;
 use App\Company\Application\Dto\CompanyRequestQuery;
+use App\Company\Application\Query\GetAllCompanyQuery;
 use App\Company\Application\Query\GetCompanyQuery;
 use App\Company\Domain\ValueObject\CompanyId;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -19,6 +20,15 @@ use Exception;
 
 class CompanyController extends ApiAbstractController
 {
+    public function collect(GetAllCompanyQuery $query): JsonResponse
+    {
+        try {
+            return new JsonResponse($query->query()->getAll());
+        } catch (Exception $exception) {
+            return $this->handleException($exception, null);
+        }
+    }
+
     public function create(CreateCompanyHandler $companyHandler, CreateCompanyRequest $request): JsonResponse
     {
         try {
@@ -32,7 +42,7 @@ class CompanyController extends ApiAbstractController
     {
         try {
             $request = new CompanyRequestQuery(new CompanyId($companyId));
-            return new JsonResponse($query->query($request), Response::HTTP_OK);
+            return new JsonResponse($query->query($request));
         } catch (Exception $exception) {
             return $this->handleException($exception, $request ?? null);
         }

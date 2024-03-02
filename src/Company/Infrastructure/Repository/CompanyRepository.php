@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Company\Infrastructure\Repository;
 
+use App\Company\Domain\Collection\CompanyViewCollection;
 use App\Company\Domain\Entity\Company;
 use App\Company\Domain\Entity\CompanyView;
 use App\Company\Domain\Exception\NipAlreadyExistsException;
@@ -42,6 +43,28 @@ readonly class CompanyRepository implements CompanyRepositoryInterface
             'DELETE FROM companies WHERE id = :id',
             ['id' => $companyId->value]
         );
+    }
+
+    public function findAll(): CompanyViewCollection
+    {
+        $companyCollection = new CompanyViewCollection();
+        $query = $this->connection->executeQuery(
+            'SELECT name, city, address, nip, postcode FROM companies'
+        );
+        $results = $query->fetchAllAssociative();
+
+        foreach ($results as $result) {
+            $companyCollection->add(
+                new CompanyView(
+                    new CompanyName($result['name']),
+                    new City($result['city']),
+                    new Address($result['address']),
+                    new Nip($result['nip']),
+                    new Postcode($result['postcode'])
+                )
+            );
+        }
+        return $companyCollection;
     }
 
     /**

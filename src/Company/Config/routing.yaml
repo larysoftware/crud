@@ -1,3 +1,7 @@
+company.collect:
+  path: /
+  controller: App\Company\Web\CompanyController::collect
+  methods: GET
 company.create:
   path: /
   controller: App\Company\Web\CompanyController::create
@@ -24,6 +28,12 @@ employee.create:
   path: /{companyId}/employee
   controller: App\Company\Web\EmployeeController::create
   methods: POST
+  requirements:
+    companyId: '\d+'
+employee.collect:
+  path: /{companyId}/employee
+  controller: App\Company\Web\EmployeeController::collect
+  methods: GET
   requirements:
     companyId: '\d+'
 employee.update:

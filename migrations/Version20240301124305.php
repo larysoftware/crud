@@ -28,7 +28,7 @@ final class Version20240301124305 extends AbstractMigration
             postcode VARCHAR(10) NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-            UNIQUE KEY unique_nip (nip)
+            UNIQUE KEY unique_companies_nip (nip)
         )');
 
     }

@@ -20,3 +20,8 @@ company.get:
   methods: GET
   requirements:
     companyId: '\d+'
+
+employee.create:
+  path: /{companyId}/employee
+  controller: App\Company\Web\EmployeeController::create
+  methods: POST

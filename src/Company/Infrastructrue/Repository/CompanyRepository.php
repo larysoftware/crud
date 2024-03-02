@@ -29,7 +29,7 @@ readonly class CompanyRepository implements CompanyRepositoryInterface
      * @throws Exception
      * @throws NipAlreadyExistsException
      */
-    public function insert(Company $company): CompanyId
+    public function create(Company $company): CompanyId
     {
         try {
             $this->connection->executeStatement(
@@ -108,7 +108,6 @@ readonly class CompanyRepository implements CompanyRepositoryInterface
 
         $result = $query->fetchAssociative();
         return !$result ? null : new CompanyView(
-            new CompanyId($result['id']),
             new CompanyName($result['name']),
             new City($result['city']),
             new Address($result['address']),

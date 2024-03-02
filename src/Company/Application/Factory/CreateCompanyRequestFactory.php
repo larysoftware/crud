@@ -7,10 +7,7 @@ namespace App\Company\Application\Factory;
 use App\Company\Application\Dto\CreateCompanyRequest;
 use InvalidArgumentException;
 
-use function sprintf;
-use function is_string;
-
-class CreateCompanyRequestFactory
+class CreateCompanyRequestFactory extends AbstractRequestFactory
 {
     private const NAME = 'name';
     private const NIP = 'nip';
@@ -26,9 +23,12 @@ class CreateCompanyRequestFactory
         self::POSTCODE
     ];
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function create(array $data): CreateCompanyRequest
     {
-        $this->validData($data);
+        $this->validRequiredTextData(self::ALL_FIELDS, $data);
         return new CreateCompanyRequest(
           $data[self::NAME],
           $data[self::NIP],
@@ -36,19 +36,5 @@ class CreateCompanyRequestFactory
           $data[self::CITY],
           $data[self::POSTCODE]
         );
-    }
-
-    private function validData(array $data): void
-    {
-        foreach (self::ALL_FIELDS as $field) {
-            if (!isset($data[$field]) || !is_string($data[$field])) {
-                throw new InvalidArgumentException(
-                    sprintf(
-                        'field %s is required and must be a string',
-                        $field
-                    )
-                );
-            }
-        }
     }
 }

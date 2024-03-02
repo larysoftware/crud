@@ -24,7 +24,7 @@ readonly class UpdateCompanyCommandHandler
 
     public function __invoke(UpdateCompanyCommand $command): void
     {
-        $this->repository->update(
+        $this->repository->save(
             new Company(
                 new CompanyId($command->id),
                 new CompanyName($command->name),

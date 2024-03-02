@@ -16,7 +16,7 @@ abstract class AbstractRequestFactory
     protected function validRequiredTextData(array $fields, array $data): void
     {
         foreach ($fields as $field) {
-            if (!isset($data[$field]) || !is_string($data[$field])) {
+            if (!is_string($data[$field] ?? null)) {
                 throw new InvalidArgumentException(
                     sprintf(
                         'field %s is required and must be a string',

@@ -7,7 +7,7 @@ namespace App\Company\Application\Dto;
 use App\Company\Domain\ValueObject\CompanyId;
 use JsonSerializable;
 
-readonly class GetCompanyByIdRequest implements JsonSerializable
+readonly class CompanyRequestQuery implements JsonSerializable
 {
     public function __construct(public CompanyId $companyId)
     {

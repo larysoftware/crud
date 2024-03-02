@@ -16,13 +16,13 @@ use App\Company\Domain\ValueObject\PhoneNumber;
 
 readonly class CreateEmployeeHandler
 {
-    public function __construct(public EmployeeRepositoryInterface $repository)
+    public function __construct(private EmployeeRepositoryInterface $repository)
     {
     }
 
     public function handle(CreateEmployeeRequest $request): CreateEmployeeResponse
     {
-        return new CreateEmployeeResponse($this->repository->create(
+        return new CreateEmployeeResponse($this->repository->save(
             new Employee(
                 null,
                 new CompanyId($request->companyId),

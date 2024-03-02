@@ -8,5 +8,5 @@ use InvalidArgumentException;
 
 class PhoneNumberAlreadyExistsException extends InvalidArgumentException
 {
-    protected $message = 'phone_number already exists';
+    protected $message = 'phone number already exists';
 }

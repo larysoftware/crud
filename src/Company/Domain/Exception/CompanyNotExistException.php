@@ -8,4 +8,5 @@ use Exception;
 
 class CompanyNotExistException extends Exception implements NotFoundException
 {
+    protected $message = 'company not exist';
 }

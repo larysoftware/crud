@@ -10,8 +10,7 @@ use App\Company\Domain\ValueObject\CompanyId;
 
 interface CompanyRepositoryInterface
 {
-    public function create(Company $company): CompanyId;
-    public function update(Company $company): void;
+    public function save(Company $company): CompanyId;
     public function delete(CompanyId $companyId): void;
     public function findById(CompanyId $companyId): ?CompanyView;
 }

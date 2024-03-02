@@ -22,7 +22,7 @@ readonly class CreateCompanyHandler
 
     public function handle(CreateCompanyRequest $request): CreateCompanyResponse
     {
-        return new CreateCompanyResponse($this->repository->create(
+        return new CreateCompanyResponse($this->repository->save(
                 new Company(
                     null,
                     new CompanyName($request->name),

@@ -29,8 +29,8 @@ final class Version20240301124326 extends AbstractMigration
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                 company_id INT UNSIGNED,
-                UNIQUE KEY unique_employees_phone (phone_number),
-                UNIQUE KEY unique_employees_email (email),
+                UNIQUE KEY unique_employees_phone (company_id,phone_number),
+                UNIQUE KEY unique_employees_email (company_id,email),
                 FOREIGN KEY (company_id) REFERENCES companies(id) ON DELETE CASCADE
             )
         ');

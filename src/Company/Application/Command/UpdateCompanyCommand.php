@@ -21,7 +21,7 @@ readonly class UpdateCompanyCommand implements JsonSerializable
     public function jsonSerialize(): array
     {
         return [
-            'id' => $this->id,
+            'company_id' => $this->id,
             'name' => $this->name,
             'nip' => $this->nip,
             'address' => $this->address,

@@ -29,7 +29,7 @@ employee.create:
 employee.update:
   path: /{companyId}/employee/{employeeId}
   controller: App\Company\Web\EmployeeController::update
-  methods: POST
+  methods: PUT
   requirements:
     companyId: '\d+'
     employeeId: '\d+'

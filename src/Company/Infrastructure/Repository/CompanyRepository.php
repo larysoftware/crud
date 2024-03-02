@@ -6,7 +6,6 @@ namespace App\Company\Infrastructure\Repository;
 
 use App\Company\Domain\Entity\Company;
 use App\Company\Domain\Entity\CompanyView;
-use App\Company\Domain\Exception\CompanyIdCantBeNullException;
 use App\Company\Domain\Exception\NipAlreadyExistsException;
 use App\Company\Domain\Repository\CompanyRepositoryInterface;
 use App\Company\Domain\ValueObject\Address;
@@ -29,66 +28,9 @@ readonly class CompanyRepository implements CompanyRepositoryInterface
      * @throws Exception
      * @throws NipAlreadyExistsException
      */
-    public function create(Company $company): CompanyId
+    public function save(Company $company): CompanyId
     {
-        try {
-            $this->connection->executeStatement(
-                'INSERT INTO companies (name, city, address, nip, postcode) 
-                    VALUES (:name, :city, :address, :nip, :postcode)', [
-                    'name' => $company->companyName->value,
-                    'city' => $company->city->value,
-                    'address' => $company->address->value,
-                    'nip' => $company->nip->value,
-                    'postcode' => $company->postCode->value,
-                ]
-            );
-            return new CompanyId((int)$this->connection->lastInsertId());
-        } catch (UniqueConstraintViolationException) {
-            throw new NipAlreadyExistsException(
-                sprintf(
-                    'nip %s already exists',
-                    $company->nip->value
-                )
-            );
-        }
-    }
-
-    /**
-     * @throws Exception
-     * @throws CompanyIdCantBeNullException
-     * @throws NipAlreadyExistsException
-     */
-    public function update(Company $company): void
-    {
-        if ($company->companyId === null) {
-            throw new CompanyIdCantBeNullException("company id can't be null");
-        }
-        try {
-            $this->connection->executeStatement(
-                'UPDATE companies 
-                    SET name = :name, 
-                    city = :city, 
-                    address = :address, 
-                    nip = :nip, 
-                    postcode = :postcode 
-                    WHERE id = :id',
-                [
-                    'id' => $company->companyId->value,
-                    'name' => $company->companyName->value,
-                    'city' => $company->city->value,
-                    'address' => $company->address->value,
-                    'nip' => $company->nip->value,
-                    'postcode' => $company->postCode->value,
-                ]
-            );
-        } catch (UniqueConstraintViolationException) {
-            throw new NipAlreadyExistsException(
-                sprintf(
-                    'nip %s already exists',
-                    $company->nip->value
-                )
-            );
-        }
+        return $company->companyId ? $this->update($company) : $this->create($company);
     }
 
     /**
@@ -120,5 +62,58 @@ readonly class CompanyRepository implements CompanyRepositoryInterface
             new Nip($result['nip']),
             new Postcode($result['postcode'])
         );
+    }
+
+    /**
+     * @throws Exception
+     * @throws NipAlreadyExistsException
+     */
+    private function create(Company $company): CompanyId
+    {
+        try {
+            $this->connection->executeStatement(
+                'INSERT INTO companies (name, city, address, nip, postcode) 
+                    VALUES (:name, :city, :address, :nip, :postcode)', [
+                    'name' => $company->companyName->value,
+                    'city' => $company->city->value,
+                    'address' => $company->address->value,
+                    'nip' => $company->nip->value,
+                    'postcode' => $company->postCode->value,
+                ]
+            );
+            return new CompanyId((int)$this->connection->lastInsertId());
+        } catch (UniqueConstraintViolationException) {
+            throw new NipAlreadyExistsException;
+        }
+    }
+
+    /**
+     * @throws Exception
+     * @throws NipAlreadyExistsException
+     */
+    private function update(Company $company): CompanyId
+    {
+        try {
+            $this->connection->executeStatement(
+                'UPDATE companies 
+                    SET name = :name, 
+                    city = :city, 
+                    address = :address, 
+                    nip = :nip, 
+                    postcode = :postcode 
+                    WHERE id = :id',
+                [
+                    'id' => $company->companyId->value,
+                    'name' => $company->companyName->value,
+                    'city' => $company->city->value,
+                    'address' => $company->address->value,
+                    'nip' => $company->nip->value,
+                    'postcode' => $company->postCode->value,
+                ]
+            );
+            return $company->companyId;
+        } catch (UniqueConstraintViolationException) {
+            throw new NipAlreadyExistsException;
+        }
     }
 }

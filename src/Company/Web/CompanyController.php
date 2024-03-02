@@ -6,7 +6,7 @@ namespace App\Company\Web;
 
 use App\Company\Application\Command\DeleteCompanyCommand;
 use App\Company\Application\Command\UpdateCompanyCommand;
-use App\Company\Application\Dto\GetCompanyByIdRequest;
+use App\Company\Application\Dto\CompanyRequestQuery;
 use App\Company\Application\Query\GetCompanyQuery;
 use App\Company\Domain\ValueObject\CompanyId;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -31,7 +31,7 @@ class CompanyController extends ApiAbstractController
     public function get(GetCompanyQuery $query, int $companyId): JsonResponse
     {
         try {
-            $request = new GetCompanyByIdRequest(new CompanyId($companyId));
+            $request = new CompanyRequestQuery(new CompanyId($companyId));
             return new JsonResponse($query->query($request), Response::HTTP_OK);
         } catch (Exception $exception) {
             return $this->handleException($exception, $request ?? null);
@@ -50,12 +50,12 @@ class CompanyController extends ApiAbstractController
 
     public function delete(MessageBusInterface $messageBus, int $companyId): JsonResponse
     {
+        $command = new DeleteCompanyCommand($companyId);
         try {
-            $command = new DeleteCompanyCommand($companyId);
             $messageBus->dispatch($command);
             return new JsonResponse(null, Response::HTTP_NO_CONTENT);
         } catch (HandlerFailedException $exception) {
-            return $this->handleException($exception->getPrevious() ?? $exception, $command ?? null);
+            return $this->handleException($exception->getPrevious() ?? $exception, $command);
         }
     }
 }

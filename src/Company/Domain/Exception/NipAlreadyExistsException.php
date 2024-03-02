@@ -8,4 +8,5 @@ use InvalidArgumentException;
 
 class NipAlreadyExistsException extends InvalidArgumentException
 {
+    protected $message = 'nip already exists';
 }

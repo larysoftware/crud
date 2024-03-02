@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace App\Company\Web;
 
+use App\Company\Application\Command\DeleteCompanyCommand;
 use App\Company\Application\Command\UpdateCompanyCommand;
+use App\Company\Application\Dto\GetCompanyByIdRequest;
+use App\Company\Application\Query\GetCompanyQuery;
+use App\Company\Domain\ValueObject\CompanyId;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -24,23 +28,34 @@ class CompanyController extends ApiAbstractController
         }
     }
 
-    public function delete(): JsonResponse
+    public function get(GetCompanyQuery $query, int $companyId): JsonResponse
     {
-        return new JsonResponse([], Response::HTTP_NO_CONTENT);
+        try {
+            $request = new GetCompanyByIdRequest(new CompanyId($companyId));
+            return new JsonResponse($query->query($request), Response::HTTP_OK);
+        } catch (Exception $exception) {
+            return $this->handleException($exception, $request ?? null);
+        }
     }
 
     public function update(MessageBusInterface $messageBus, UpdateCompanyCommand $command): JsonResponse
     {
         try {
             $messageBus->dispatch($command);
-            return new JsonResponse($command, Response::HTTP_OK);
-        } catch (HandlerFailedException $invalidArgumentException) {
-            return $this->handleException($invalidArgumentException->getPrevious(), $command);
+            return new JsonResponse($command, Response::HTTP_NO_CONTENT);
+        } catch (HandlerFailedException $exception) {
+            return $this->handleException($exception->getPrevious() ?? $exception, $command);
         }
     }
 
-    public function get(): JsonResponse
+    public function delete(MessageBusInterface $messageBus, int $companyId): JsonResponse
     {
-        return new JsonResponse([], Response::HTTP_OK);
+        try {
+            $command = new DeleteCompanyCommand($companyId);
+            $messageBus->dispatch($command);
+            return new JsonResponse(null, Response::HTTP_NO_CONTENT);
+        } catch (HandlerFailedException $exception) {
+            return $this->handleException($exception->getPrevious() ?? $exception, $command ?? null);
+        }
     }
 }

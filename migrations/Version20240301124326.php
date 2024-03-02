@@ -21,11 +21,13 @@ final class Version20240301124326 extends AbstractMigration
     {
         $this->addSql('
         CREATE TABLE IF NOT EXISTS employees (
-                id INT AUTO_INCREMENT PRIMARY KEY,
+                id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                 first_name VARCHAR(50) NOT NULL,
                 last_name VARCHAR(50) NOT NULL,
                 email VARCHAR(255) NOT NULL,
                 phone_number VARCHAR(20) DEFAULT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                 company_id INT UNSIGNED,
                 FOREIGN KEY (company_id) REFERENCES companies(id) ON DELETE CASCADE
             )

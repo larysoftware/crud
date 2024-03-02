@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Company\Infrastructrue\ValueResolver;
+namespace App\Company\Infrastructure\ValueResolver;
 
 use App\Company\Application\Command\UpdateCompanyCommand;
 use App\Company\Application\Factory\UpdateCompanyCommandFactory;

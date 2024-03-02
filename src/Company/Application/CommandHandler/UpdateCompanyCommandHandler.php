@@ -22,7 +22,7 @@ readonly class UpdateCompanyCommandHandler
     {
     }
 
-    public function __invoke(UpdateCompanyCommand $command)
+    public function __invoke(UpdateCompanyCommand $command): void
     {
         $this->repository->update(
             new Company(

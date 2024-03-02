@@ -13,5 +13,5 @@ interface EmployeeRepositoryInterface
     public function create(Employee $employee): EmployeeId;
     public function update(Employee $employee): void;
     public function delete(EmployeeId $employeeId): void;
-    public function findById(EmployeeId $employeeId): EmployeeView;
+    public function findById(EmployeeId $employeeId): ?EmployeeView;
 }

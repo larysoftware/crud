@@ -16,7 +16,7 @@ readonly class DeleteCompanyCommandHandler
     {
     }
 
-    public function __invoke(DeleteCompanyCommand $command)
+    public function __invoke(DeleteCompanyCommand $command): void
     {
         $this->repository->delete(new CompanyId($command->companyId));
     }

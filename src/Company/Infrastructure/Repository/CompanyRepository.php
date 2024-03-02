@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Company\Infrastructrue\Repository;
+namespace App\Company\Infrastructure\Repository;
 
 use App\Company\Domain\Entity\Company;
 use App\Company\Domain\Entity\CompanyView;
@@ -65,7 +65,13 @@ readonly class CompanyRepository implements CompanyRepositoryInterface
         }
         try {
             $this->connection->executeStatement(
-                'UPDATE companies SET name = :name, city = :city, address = :address, nip = :nip, postcode = :postcode WHERE id = :id',
+                'UPDATE companies 
+                    SET name = :name, 
+                    city = :city, 
+                    address = :address, 
+                    nip = :nip, 
+                    postcode = :postcode 
+                    WHERE id = :id',
                 [
                     'id' => $company->companyId->value,
                     'name' => $company->companyName->value,

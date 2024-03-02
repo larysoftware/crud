@@ -20,8 +20,30 @@ company.get:
   methods: GET
   requirements:
     companyId: '\d+'
-
 employee.create:
   path: /{companyId}/employee
   controller: App\Company\Web\EmployeeController::create
   methods: POST
+  requirements:
+    companyId: '\d+'
+employee.update:
+  path: /{companyId}/employee/{employeeId}
+  controller: App\Company\Web\EmployeeController::update
+  methods: POST
+  requirements:
+    companyId: '\d+'
+    employeeId: '\d+'
+employee.delete:
+  path: /{companyId}/employee/{employeeId}
+  controller: App\Company\Web\EmployeeController::delete
+  methods: DELETE
+  requirements:
+    companyId: '\d+'
+    employeeId: '\d+'
+employee.get:
+  path: /{companyId}/employee/{employeeId}
+  controller: App\Company\Web\EmployeeController::get
+  methods: GET
+  requirements:
+    companyId: '\d+'
+    employeeId: '\d+'

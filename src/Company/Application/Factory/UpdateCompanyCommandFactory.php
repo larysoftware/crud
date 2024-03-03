@@ -23,7 +23,6 @@ class UpdateCompanyCommandFactory extends AbstractRequestFactory
         self::POSTCODE
     ];
 
-
     /**
      * @throws InvalidArgumentException
      */

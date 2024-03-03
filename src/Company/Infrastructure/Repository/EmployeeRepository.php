@@ -41,7 +41,6 @@ readonly class EmployeeRepository implements EmployeeRepositoryInterface
         return $employee->employeeId ? $this->update($employee) : $this->create($employee);
     }
 
-
     /**
      * @throws Exception
      */

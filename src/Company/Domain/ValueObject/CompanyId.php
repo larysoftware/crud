@@ -13,7 +13,7 @@ readonly class CompanyId implements JsonSerializable
     public function __construct(public int $value)
     {
         if ($this->value < 1) {
-            throw new InvalidArgumentException('Company id must be greater than 1');
+            throw new InvalidArgumentException('Company id must be greater than 0');
         }
     }
 

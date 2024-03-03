@@ -45,17 +45,21 @@ readonly class CompanyRepository implements CompanyRepositoryInterface
         );
     }
 
+    /**
+     * @throws Exception
+     */
     public function findAll(): CompanyViewCollection
     {
         $companyCollection = new CompanyViewCollection();
         $query = $this->connection->executeQuery(
-            'SELECT name, city, address, nip, postcode FROM companies'
+            'SELECT id,name, city, address, nip, postcode FROM companies'
         );
         $results = $query->fetchAllAssociative();
 
         foreach ($results as $result) {
             $companyCollection->add(
                 new CompanyView(
+                    new CompanyId($result['id']),
                     new CompanyName($result['name']),
                     new City($result['city']),
                     new Address($result['address']),
@@ -79,6 +83,7 @@ readonly class CompanyRepository implements CompanyRepositoryInterface
 
         $result = $query->fetchAssociative();
         return !$result ? null : new CompanyView(
+            new CompanyId($result['id']),
             new CompanyName($result['name']),
             new City($result['city']),
             new Address($result['address']),

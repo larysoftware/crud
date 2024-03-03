@@ -44,7 +44,7 @@ class EmployeeController extends ApiAbstractController
     {
         try {
             $request = new EmployeeCompanyRequestQuery(new CompanyId($companyId), new EmployeeId($employeeId));
-            return new JsonResponse($query->query($request), Response::HTTP_OK);
+            return new JsonResponse($query->query($request));
         } catch (Exception $exception) {
             return $this->handleException($exception, $request ?? null);
         }

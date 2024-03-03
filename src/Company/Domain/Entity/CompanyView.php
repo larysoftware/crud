@@ -6,6 +6,7 @@ namespace App\Company\Domain\Entity;
 
 use App\Company\Domain\ValueObject\Address;
 use App\Company\Domain\ValueObject\City;
+use App\Company\Domain\ValueObject\CompanyId;
 use App\Company\Domain\ValueObject\CompanyName;
 use App\Company\Domain\ValueObject\Nip;
 use App\Company\Domain\ValueObject\PostCode;
@@ -14,6 +15,7 @@ use JsonSerializable;
 readonly class CompanyView implements JsonSerializable
 {
     public function __construct(
+        public CompanyId $companyId,
         public CompanyName $companyName,
         public City $city,
         public Address $address,
@@ -22,11 +24,12 @@ readonly class CompanyView implements JsonSerializable
     }
 
     /**
-     * @return array<string, string>
+     * @return array<string, string|int>
      */
     public function jsonSerialize(): array
     {
         return [
+            'id' => $this->companyId->value,
             'name' => $this->companyName->value,
             'nip' => $this->nip->value,
             'address' => $this->address->value,

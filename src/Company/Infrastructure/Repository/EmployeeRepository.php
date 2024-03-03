@@ -42,11 +42,14 @@ readonly class EmployeeRepository implements EmployeeRepositoryInterface
     }
 
 
+    /**
+     * @throws Exception
+     */
     public function findAllByCompanyId(CompanyId $companyId): EmployeeViewCollection
     {
         $collection = new EmployeeViewCollection();
         $query = $this->connection->executeQuery(
-            'SELECT `first_name`, `last_name`, `email`, `phone_number` FROM employees WHERE company_id = :company_id',
+            'SELECT `id`,`first_name`, `last_name`, `email`, `phone_number` FROM employees WHERE company_id = :company_id',
             [
                 'company_id' => $companyId->value
             ]
@@ -55,6 +58,7 @@ readonly class EmployeeRepository implements EmployeeRepositoryInterface
         foreach ($results as $result) {
             $collection->add(
                 new EmployeeView(
+                    new EmployeeId($result['id']),
                     new FirstName($result['first_name']),
                     new LastName($result['last_name']),
                     new Email($result['email']),
@@ -71,7 +75,7 @@ readonly class EmployeeRepository implements EmployeeRepositoryInterface
     public function findByCompanyIdAndEmployeeId(CompanyId $companyId, EmployeeId $employeeId): ?EmployeeView
     {
         $query = $this->connection->executeQuery(
-            'SELECT `first_name`, `last_name`, `email`, `phone_number` FROM employees WHERE id = :id AND company_id = :company_id',
+            'SELECT `id`,`first_name`, `last_name`, `email`, `phone_number` FROM employees WHERE id = :id AND company_id = :company_id',
             [
                 'id' => $employeeId->value,
                 'company_id' => $companyId->value
@@ -80,6 +84,7 @@ readonly class EmployeeRepository implements EmployeeRepositoryInterface
 
         $result = $query->fetchAssociative();
         return $result ? new EmployeeView(
+            new EmployeeId($result['id']),
             new FirstName($result['first_name']),
             new LastName($result['last_name']),
             new Email($result['email']),

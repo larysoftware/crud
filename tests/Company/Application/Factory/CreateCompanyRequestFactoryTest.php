@@ -51,4 +51,19 @@ class CreateCompanyRequestFactoryTest extends TestCase
 
         $this->factory->create($data);
     }
+
+    public function testCreateRequestWithInvalidTypeField(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $data = [
+            'name' => 'Example Company',
+            'nip' => 1234567890,
+            'address' => '123 Example Street',
+            'city' => 'Example City',
+            'postcode' => '12345'
+        ];
+
+        $request = $this->factory->create($data);
+    }
 }

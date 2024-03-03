@@ -22,7 +22,6 @@ readonly class GetEmployeeQuery
      */
     public function query(EmployeeCompanyRequestQuery $request): EmployeeView
     {
-
         $employee = $this->employeeRepository->findByCompanyIdAndEmployeeId(
             $request->companyId,
             $request->employeeId

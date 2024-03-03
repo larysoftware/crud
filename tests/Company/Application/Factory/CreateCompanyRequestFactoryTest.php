@@ -64,6 +64,6 @@ class CreateCompanyRequestFactoryTest extends TestCase
             'postcode' => '12345'
         ];
 
-        $request = $this->factory->create($data);
+        $this->factory->create($data);
     }
 }
